@@ -12,10 +12,13 @@ UCLASS()
 class BATTLECAT_API ABC_Unit : public ABC_Entity
 {
 	GENERATED_BODY()
+	
+	UPROPERTY(EditAnywhere, Category = "Unit|Fonctionnality") UTexture2D* logoTexture = nullptr;
 
-	UPROPERTY(EditAnywhere, Category = "Entity|Stats") int unitPrice = 0;
+	UPROPERTY(EditAnywhere, Category = "Unit|Stats") int unitPrice = 0;
 
 public:
+	FORCEINLINE UTexture2D* GetLogoTexture() const { return logoTexture; } 
 	FORCEINLINE int GetUnitPrice() const { return unitPrice; }
 
 protected:
@@ -23,5 +26,6 @@ protected:
 	virtual void Tick(float DeltaSeconds) override;
 	
 	// Redéfinit la fonction Attack de la class mère (ABC_Entity) pour ajouter les fonctionnalitées voulues.
-	virtual void Attack() override;
+	virtual void Attack_Single() override;
+	virtual void Attack_Area() override;
 };

@@ -3,10 +3,10 @@
 #include "BC_FightHUD.h"
 #include "BC_Unit.h"
 #include "PaperSprite.h"
+#include "BC_Macro.h"
 
 #define MAX_CAT_SPAWN_PER_ROW 5
 #define MAX_CAT 10
-#define LOG_ERROR(_msg) UE_LOG(LogTemp, Error, TEXT(_msg))
 
 
 void UBC_FightWidget::NativeConstruct()
@@ -79,14 +79,9 @@ void UBC_FightWidget::InitSpawnCatButtons(const TArray<TSubclassOf<ABC_Unit>>& _
 	{
 		ABC_Unit* _unitBP = Cast<ABC_Unit>(_allUnits[i].GetDefaultObject());
 		if (!_unitBP)return;
-		UPaperSpriteComponent* _spriteComponent = _unitBP->GetSpriteComponent();
-		if (!_spriteComponent)return;
-		UPaperSprite* _paperSprite = _spriteComponent->GetSprite();
-		if (!_paperSprite)return;
-		UTexture2D* _texture = _paperSprite->GetSourceTexture();
-		if (!_texture)return;
-
-		allCatSpawners[i]->AddCatSpawnerData(_texture, _unitBP->GetUnitPrice());
+		UTexture2D* _logoTexture = _unitBP->GetLogoTexture();
+		RETURN_LOG(!_logoTexture, "UBC_FightWidget::InitSpawnCatButtons -> Missing Logo Texture");
+		allCatSpawners[i]->AddCatSpawnerData(_logoTexture, _unitBP->GetUnitPrice());
 	}
 
 	// Tous les boutons qui n'ont pas d'Unit associer sont alors désactivé.

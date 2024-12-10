@@ -23,6 +23,7 @@ void ABC_Entity::BeginPlay()
 {
 	Super::BeginPlay();
 	InitSpriteLocation();
+	InitOptimisedEventsCalls();
 
 	//Can directly attack when spawned
 	currentAttackSpeedTimer = attackSpeed;
@@ -30,14 +31,20 @@ void ABC_Entity::BeginPlay()
 
 void ABC_Entity::DetectEnemy()
 {
+	if (!hasFinishAttackAnimation)return;
+	
+	const FVector& _startLocation = GetActorLocation();
+	const FVector& _endLocation = _startLocation + forwardDirection * attackRange;
+	
+	FHitResult _hitResult;
 	bool _hasHit = UKismetSystemLibrary::LineTraceSingleForObjects(GetWorld(),
-																   GetActorLocation(),
-																   GetActorLocation() + forwardDirection * attackRange,
+																   _startLocation,
+																   _endLocation,
 																   attackLayer,
 																   false,
 																   TArray<AActor*>(),
 																   EDrawDebugTrace::ForOneFrame,
-																   hitResult,
+																   _hitResult,
 																   true);
 
 	// L'entitée reste en phase d'attack lorsqu'elle détecte un enemy ou qu'elle n'a pas finit son animation d'attack.
@@ -52,7 +59,12 @@ void ABC_Entity::Move(float _deltaTime)
 	AddActorWorldOffset(forwardDirection * _deltaTime * moveSpeed);
 }
 
-void ABC_Entity::Attack()
+void ABC_Entity::Attack_Single()
+{
+	// Declaration in childs class
+}
+
+void ABC_Entity::Attack_Area()
 {
 	// Declaration in childs class
 }
@@ -96,8 +108,8 @@ void ABC_Entity::Attacking(float _deltaTime)
 			attackState = EAttackState::BACKSWING;
 			currentAttackSpeedTimer = 0.0f;
 			currentAttackSwingTimer = 0.0f;
-			
-			Attack();
+
+			onPrepareAttack.Broadcast();
 			onAttack.Broadcast();
 			
 			spriteComponent->SetSprite(backswingSprite);
@@ -135,10 +147,56 @@ void ABC_Entity::LoseHealth(int _damageAmount)
 
 void ABC_Entity::InitSpriteLocation()
 {
-	UPaperSprite* _paperSprite = spriteComponent->GetSprite();
-	if (!_paperSprite)return;
-
-	// Prend la moitié de la taille du sprite et le rajoute au component,
+	RETURN_LOG(!idleTexture, "ABC_Entity::InitSpriteLocation -> Missing Walk Texture");
+	
+	// Prend la moitié de la taille de la texture et la rajoute au component,
 	// pour donner l'impression que l'Entity est sur le sol.
-	spriteComponent->SetRelativeLocation(FVector(0, 0, _paperSprite->GetSourceSize().Y / 2.0f));
+	
+	spriteComponent->SetRelativeLocation(FVector(0, 0, idleTexture->GetSizeY() / 2.0f));
+}
+
+void ABC_Entity::InitOptimisedEventsCalls()
+{
+	if (attackType == EAttackType::SINGLE)
+	{
+		onPrepareAttack.AddUniqueDynamic(this, &ABC_Entity::INTERNAL_PrepareAttack_Single);
+		onAttack.AddUniqueDynamic(this, &ABC_Entity::Attack_Single);
+	}
+	else if (attackType == EAttackType::AREA)
+	{
+		onPrepareAttack.AddUniqueDynamic(this, &ABC_Entity::INTERNAL_PrepareAttack_Area);
+		onAttack.AddUniqueDynamic(this, &ABC_Entity::Attack_Area);
+	}
+}
+
+void ABC_Entity::INTERNAL_PrepareAttack_Single()
+{
+	const FVector& _startLocation = GetActorLocation();
+	const FVector& _endLocation = _startLocation + forwardDirection * attackRange;
+	
+	UKismetSystemLibrary::LineTraceSingleForObjects(GetWorld(),
+												    _startLocation,
+												    _endLocation,
+												    attackLayer,
+												    false,
+												    TArray<AActor*>(),
+												    EDrawDebugTrace::ForOneFrame,
+												    hitSingleResult,
+												    true);
+}
+
+void ABC_Entity::INTERNAL_PrepareAttack_Area()
+{
+	const FVector& _startLocation = GetActorLocation();
+	const FVector& _endLocation = _startLocation + forwardDirection * attackRange;
+
+	UKismetSystemLibrary::LineTraceMultiForObjects(GetWorld(),
+												   _startLocation,
+												   _endLocation,
+												   attackLayer,
+												   false,
+												   TArray<AActor*>(),
+												   EDrawDebugTrace::ForOneFrame,
+												   hitMultiResult,
+												   true);
 }

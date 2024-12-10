@@ -14,10 +14,18 @@ class BATTLECAT_API ABC_Enemy : public ABC_Entity
 {
 	GENERATED_BODY()
 
+	UPROPERTY(EditAnywhere, Category = "Enemy|Stats") int moneyDrop = 0;
+
 protected:
+	virtual void BeginPlay() override;
 	// Définit ce que l'enemy fait. (Detection, Movement et phase d'Attack)
 	virtual void Tick(float DeltaSeconds) override;
 
 	// Redéfinit la fonction Attack de la class mère (ABC_Entity) pour ajouter les fonctionnalitées voulues.
-	virtual void Attack() override;
+	virtual void Attack_Single() override;
+	virtual void Attack_Area() override;
+
+private:
+	void InitEnemy();
+	UFUNCTION() void DropMoney();
 };

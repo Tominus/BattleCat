@@ -35,30 +35,20 @@ private:
 	float spawnDeepOffset = 30.0f;
 
 	// Stock tous les BP des Unit que le player possède. (Sert pour l'affichage en UI et le spawn d'Unit)
-	UPROPERTY(EditAnywhere, Category = "Player|Money")
-	TArray<TSubclassOf<ABC_Unit>> allUnits;
+	UPROPERTY(EditAnywhere, Category = "Player|Money") TArray<TSubclassOf<ABC_Unit>> allUnits;
 
 	// Les données relatifs à l'argent.
-	UPROPERTY(VisibleAnywhere, Category = "Player|Money")
-	float currentMoney = 0.0f;
-	UPROPERTY(EditAnywhere, Category = "Player|Money")
-	float maxMoney = 100.0f;
-	UPROPERTY(EditAnywhere, Category = "Player|Money")
-	float earnMoneySpeed = 1.5f;
+	UPROPERTY(VisibleAnywhere, Category = "Player|Money") float currentMoney = 0.0f;
+	UPROPERTY(EditAnywhere, Category = "Player|Money") float maxMoney = 100.0f;
+	UPROPERTY(EditAnywhere, Category = "Player|Money") float earnMoneySpeed = 1.5f;
 	
 	// Les données relatifs aux améliorations du WorkerCat.
-	UPROPERTY(EditAnywhere, Category = "Player|WorkerCat")
-	float addMaxMoney = 40.0f;
-	UPROPERTY(EditAnywhere, Category = "Player|WorkerCat")
-	float addEarnMoneySpeed = 0.5f;
-	UPROPERTY(EditAnywhere, Category = "Player|WorkerCat")
-	int workerCatUpgradeCost = 40;
-	UPROPERTY(EditAnywhere, Category = "Player|WorkerCat")
-	int workerCatUpgradeCostToAdd = 40;
-	UPROPERTY(EditAnywhere, Category = "Player|WorkerCat")
-	int workerCatCurrentLevel = 1;
-	UPROPERTY(EditAnywhere, Category = "Player|WorkerCat")
-	int workerCatMaxLevel = 8;
+	UPROPERTY(EditAnywhere, Category = "Player|WorkerCat") float addMaxMoney = 40.0f;
+	UPROPERTY(EditAnywhere, Category = "Player|WorkerCat") float addEarnMoneySpeed = 0.5f;
+	UPROPERTY(EditAnywhere, Category = "Player|WorkerCat") int workerCatUpgradeCost = 40;
+	UPROPERTY(EditAnywhere, Category = "Player|WorkerCat") int workerCatUpgradeCostToAdd = 40;
+	UPROPERTY(EditAnywhere, Category = "Player|WorkerCat") int workerCatCurrentLevel = 1;
+	UPROPERTY(EditAnywhere, Category = "Player|WorkerCat") int workerCatMaxLevel = 8;
 
 
 	UPROPERTY()	ABC_FightHUD* hud = nullptr;
@@ -88,5 +78,8 @@ private:
 
 	// Calcul quelle unitée doit être spawn et son coût.
 	UFUNCTION() void SpawnCat(int _catIndex);
+
+public:
+	void AddPlayerMoney(int _amount);
 	
 };

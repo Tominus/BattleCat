@@ -33,9 +33,10 @@ void ABC_FightStarter::InitGame()
 
 	ABC_FightGameMode* _gm = GetWorld()->GetAuthGameMode<ABC_FightGameMode>();
 	if (!_gm)return;
-	ABC_Player* _player = _gm->GetPlayer();
-	if (!_player)return;
-	_player->SetUnitBase(unitBase);
+	player = _gm->GetPlayer();
+	if (!player)return;
+	player->SetUnitBase(unitBase);
+	player->SetActorLocation(cameraOffset);
 
 	ABC_AI_Enemy* _enemyAI = _gm->GetAIEnemy();
 	if (!_enemyAI)return;

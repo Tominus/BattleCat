@@ -4,6 +4,7 @@
 #include "GameFramework/Actor.h"
 #include "BC_FightStarter.generated.h"
 
+class ABC_Player;
 class ABC_UnitBase;
 class ABC_EnemyBase;
 
@@ -24,9 +25,13 @@ class BATTLECAT_API ABC_FightStarter : public AActor
 	
 	UPROPERTY(EditAnywhere, Category = "FightStarter")
 	float basesSpacing = 100.0f;
+	
+	UPROPERTY(EditAnywhere, Category = "FightStarter")
+	FVector cameraOffset = FVector(-350.0f, 0.0f, 100.0f);
 
 	UPROPERTY()	ABC_EnemyBase* enemyBase = nullptr;
 	UPROPERTY()	ABC_UnitBase* unitBase = nullptr;
+	UPROPERTY() ABC_Player* player = nullptr;
 	
 public:
 	ABC_FightStarter();

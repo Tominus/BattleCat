@@ -85,11 +85,6 @@ void ABC_Player::UpgradeWorkerCat()
 	++workerCatCurrentLevel;
 
 	onUpgradeComplete.Broadcast();
-
-	if (hud)
-	{
-		hud->UpdateWorkerCatPrice(workerCatCurrentLevel, workerCatMaxLevel, workerCatUpgradeCost);
-	}
 }
 
 void ABC_Player::SpawnCat(int _catIndex)
@@ -124,4 +119,12 @@ void ABC_Player::SpawnCat(int _catIndex)
 
 	if (!_spawnedUnit)return;
 	onUnitSpawned.Broadcast(_spawnedUnit);
+}
+
+void ABC_Player::AddPlayerMoney(int _amount)
+{
+	currentMoney += static_cast<float>(_amount);
+	
+	if (currentMoney > maxMoney)
+		currentMoney = maxMoney;
 }
