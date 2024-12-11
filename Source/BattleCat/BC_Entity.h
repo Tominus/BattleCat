@@ -28,6 +28,40 @@ enum class EAttackType
 	//OMNI_STRIKE,
 };
 
+UENUM()
+enum class ETraitType
+{
+	TRAITLESS,
+	RED,
+	FLOATING,
+	BLACK,
+	METAL,
+	ANGEL,
+	ALIEN,
+	ZOMBIE,
+	RELIC,
+	AKU,
+};
+
+UENUM()
+enum class EEffectType
+{
+	//WEAKEN,
+	//FREEZE,
+	//SLOW,
+	//ATTACKS_ONLY,
+	STRONG_AGAINST,
+	//RESISTANT,
+	//INSANELY_TOUGH,
+	//MASSIVE_DAMAGE,
+	//INSANE_DAMAGE,
+	//KNOCKBACK,
+	//WARP,
+	//CURSE,
+	//DODGE_ATTACK
+	// TODO other effects types
+};
+
 /* Entity est une class contenant beaucoup d'information (Animation, Stats, ou fonctionnalitées).
  * Cette class a pour but que toutes ses class filles ont les mêmes Datas et Fonctions.
  * L'Entity ne fera aucune action d'elle même, seules ses class filles définissent ce qu'il se passe en Tick.*/

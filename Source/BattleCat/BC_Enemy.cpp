@@ -38,6 +38,8 @@ void ABC_Enemy::Attack_Area()
 
 void ABC_Enemy::InitEnemy()
 {
+	RETURN_LOG(enemyTraitTypes.Num() < 1, "ABC_Enemy::InitEnemy -> Enemy with no Traits detected !");
+	
 	onEntityDie.AddUniqueDynamic(this, &ABC_Enemy::DropMoney);
 }
 

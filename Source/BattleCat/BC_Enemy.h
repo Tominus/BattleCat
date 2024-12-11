@@ -14,8 +14,18 @@ class BATTLECAT_API ABC_Enemy : public ABC_Entity
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere, Category = "Enemy|Stats") int moneyDrop = 0;
+	UPROPERTY(EditAnywhere, Category = "Entity|Enemy|Stats") int moneyDrop = 0;
+	UPROPERTY(EditAnywhere, Category = "Entity|Enemy|Stats")
+	TArray<ETraitType> enemyTraitTypes = TArray<ETraitType>
+	({
+		ETraitType::TRAITLESS
+	});
+	UPROPERTY(EditAnywhere, Category = "Entity|Enemy|Stats") TArray<EEffectType> enemyEffectType;
+	
 
+public:
+	FORCEINLINE const TArray<ETraitType>& GetEnemyTraitTypes() const { return enemyTraitTypes; }
+	
 protected:
 	virtual void BeginPlay() override;
 	// Définit ce que l'enemy fait. (Detection, Movement et phase d'Attack)
