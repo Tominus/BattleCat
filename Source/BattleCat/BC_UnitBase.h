@@ -27,6 +27,6 @@ public:
 
 protected:
 	// Redéfinition dont la façon la base prend des dégâts pour éviter le Destroy() et faire un Event à la place.
-	virtual void LoseHealth(int _damageAmount) override;
+	virtual void LoseHealth(int _damageAmount, const TArray<ETraitType>& _attackerTraitsType) override;
 	
 };

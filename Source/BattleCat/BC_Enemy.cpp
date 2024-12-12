@@ -22,7 +22,7 @@ void ABC_Enemy::Attack_Single()
 {
 	ABC_Entity* _entity = Cast<ABC_Entity>(hitSingleResult.GetActor());
 	if (!_entity)return;
-	_entity->LoseHealth(attackDamage);
+	_entity->LoseHealth(attackDamage, enemyTraitTypes);
 }
 
 void ABC_Enemy::Attack_Area()
@@ -32,7 +32,7 @@ void ABC_Enemy::Attack_Area()
 	{
 		ABC_Entity* _entity = Cast<ABC_Entity>(hitMultiResult[i].GetActor());
 		if (!_entity)return;
-		_entity->LoseHealth(attackDamage);
+		_entity->LoseHealth(attackDamage, enemyTraitTypes);
 	}
 }
 

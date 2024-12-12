@@ -31,9 +31,8 @@ protected:
 	// Redéfinit la fonction Attack de la class mère (ABC_Entity) pour ajouter les fonctionnalitées voulues.
 	virtual void Attack_Single() override;
 	virtual void Attack_Area() override;
-
-	// TODO effect of strong
-	virtual void LoseHealth(int _damageAmount) override;
+	
+	virtual void LoseHealth(int _damageAmount, const TArray<ETraitType>& _attackerTraitsTypes) override;
 
 	void AttackEnemy(AActor* _enemyActor);
 
@@ -42,4 +41,7 @@ protected:
 
 	void CalculateDamageApplyed(float& _damageMultiplier);
 	void CalculateEffectApplyed(TArray<EEffectType>& _effectsToApply);
+
+	void CalculateDamageTakenByTraits(const TArray<ETraitType>& _attackerTraitsType, float& _damageMultiplier);
+	void CalculateDamageTaken(float& _damageMultiplier);
 };

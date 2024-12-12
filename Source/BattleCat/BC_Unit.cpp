@@ -26,6 +26,18 @@ void ABC_Unit::Attack_Area()
 	}
 }
 
+void ABC_Unit::LoseHealth(int _damageAmount, const TArray<ETraitType>& _attackerTraitsTypes)
+{
+	// Calculate
+	float _damageMultiplier = 1.0f;
+
+	CalculateDamageTakenByTraits(_attackerTraitsTypes, _damageMultiplier);
+
+	_damageAmount *= _damageMultiplier;
+	
+	Super::LoseHealth(_damageAmount, _attackerTraitsTypes);
+}
+
 void ABC_Unit::AttackEnemy(AActor* _enemyActor)
 {
 	if (!_enemyActor)return;
@@ -38,11 +50,11 @@ void ABC_Unit::AttackEnemy(AActor* _enemyActor)
 		CalculateDamageAndEffectsApplyed(_enemy->GetEnemyTraitTypes(), _damageMultiplier, _effectsToApply);
 		
 		// TODO apply effects to enemy
-		_enemy->LoseHealth(attackDamage * _damageMultiplier);
+		_enemy->LoseHealth(attackDamage * _damageMultiplier, attackTraitsType);
 	}
 	else if (ABC_EnemyBase* _enemyBase = Cast<ABC_EnemyBase>(_enemyActor))
 	{
-		_enemyBase->LoseHealth(attackDamage);
+		_enemyBase->LoseHealth(attackDamage, attackTraitsType);
 	}
 }
 
@@ -70,9 +82,9 @@ void ABC_Unit::CalculateDamageAndEffectsApplyed(const TArray<ETraitType>& _enemy
 void ABC_Unit::CalculateDamageApplyed(float& _damageMultiplier)
 {
 	const size_t _attackEffectsCount = attackEffectsType.Num();
-	for (size_t k = 0; k < _attackEffectsCount; ++k)
+	for (size_t i = 0; i < _attackEffectsCount; ++i)
 	{
-		if (attackEffectsType[k] == EEffectType::STRONG_AGAINST)
+		if (attackEffectsType[i] == EEffectType::STRONG_AGAINST)
 		{
 			_damageMultiplier = 1.5f;
 		}
@@ -82,4 +94,36 @@ void ABC_Unit::CalculateDamageApplyed(float& _damageMultiplier)
 void ABC_Unit::CalculateEffectApplyed(TArray<EEffectType>& _effectsToApply)
 {
 	// TODO
+}
+
+void ABC_Unit::CalculateDamageTakenByTraits(const TArray<ETraitType>& _attackerTraitsType, float& _damageMultiplier)
+{
+	const size_t _attackerTraitsCount = _attackerTraitsType.Num();
+	for (size_t i = 0; i < _attackerTraitsCount; ++i)
+	{
+		const ETraitType _enemyTrait = _attackerTraitsType[i];
+			
+		const size_t _attackTraitsCount = attackTraitsType.Num();
+		for (size_t j = 0; j < _attackTraitsCount; ++j)
+		{
+			if (_enemyTrait == attackTraitsType[j])
+			{
+				// Unit being attacked by the right attacker type
+
+				CalculateDamageTaken(_damageMultiplier);
+			}
+		}
+	}
+}
+
+void ABC_Unit::CalculateDamageTaken(float& _damageMultiplier)
+{
+	const size_t _attackEffectsCount = attackEffectsType.Num();
+	for (size_t i = 0; i < _attackEffectsCount; ++i)
+	{
+		if (attackEffectsType[i] == EEffectType::STRONG_AGAINST)
+		{
+			_damageMultiplier = 0.5f;
+		}
+	}
 }

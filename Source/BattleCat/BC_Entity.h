@@ -159,7 +159,7 @@ public:
 
 	// Fonction virtual pour que les class filles puissent redéfinir son fonctionnement
 	// Permet de faire perdre des points de vie à l'unité et la détruire lors de la mort.
-	virtual void LoseHealth(int _damageAmount);
+	virtual void LoseHealth(int _damageAmount, const TArray<ETraitType>& _attackerTraitsType);
 
 private:
 	// Permet de calculer la hauteur à laquelle le Sprite se positionne (Car toutes les entitées sont en (0, x, 0))

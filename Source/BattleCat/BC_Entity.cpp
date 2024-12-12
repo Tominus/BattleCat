@@ -130,7 +130,7 @@ void ABC_Entity::Attacking(float _deltaTime)
 	}
 }
 
-void ABC_Entity::LoseHealth(int _damageAmount)
+void ABC_Entity::LoseHealth(int _damageAmount, const TArray<ETraitType>& _attackerTraitsType)
 {
 	healthPoint -= _damageAmount;
 
