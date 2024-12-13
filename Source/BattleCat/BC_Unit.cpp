@@ -84,9 +84,19 @@ void ABC_Unit::CalculateDamageApplyed(float& _damageMultiplier)
 	const size_t _attackEffectsCount = attackEffectsType.Num();
 	for (size_t i = 0; i < _attackEffectsCount; ++i)
 	{
-		if (attackEffectsType[i] == EEffectType::STRONG_AGAINST)
+		const EEffectType _currentAttackEffectType = attackEffectsType[i];
+		
+		if (_currentAttackEffectType == EEffectType::STRONG_AGAINST)
 		{
 			_damageMultiplier = 1.5f;
+		}
+		else if (_currentAttackEffectType == EEffectType::MASSIVE_DAMAGE)
+		{
+			_damageMultiplier = 3.0f;
+		}
+		else if (_currentAttackEffectType == EEffectType::INSANE_DAMAGE)
+		{
+			_damageMultiplier = 5.0f;
 		}
 	}
 }
@@ -121,9 +131,19 @@ void ABC_Unit::CalculateDamageTaken(float& _damageMultiplier)
 	const size_t _attackEffectsCount = attackEffectsType.Num();
 	for (size_t i = 0; i < _attackEffectsCount; ++i)
 	{
-		if (attackEffectsType[i] == EEffectType::STRONG_AGAINST)
+		const EEffectType _currentAttackEffectType = attackEffectsType[i];
+		
+		if (_currentAttackEffectType == EEffectType::STRONG_AGAINST)
 		{
 			_damageMultiplier = 0.5f;
+		}
+		else if (_currentAttackEffectType == EEffectType::RESISTANT)
+		{
+			_damageMultiplier = 0.25f;
+		}
+		else if (_currentAttackEffectType == EEffectType::INSANELY_TOUGH)
+		{
+			_damageMultiplier = 0.167f;
 		}
 	}
 }
